@@ -11,23 +11,21 @@ import com.example.hm7_cleanarchitecture.model.ItemType
 
 class PersonViewHolder(
     private val binding: ItemPersonBinding,
-    private val onUserClicked: (ItemType<Person>) -> Unit,
+    private val onUserClicked: (Person) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(person: ItemType<Person>) {
-
-        val newPerson = person as ItemType.Content
+    fun bind(person: Person) {
 
         with(binding) {
-            imageView.load(newPerson.data.imageApi) {
+            imageView.load(person.imageApi) {
                 scale(Scale.FILL)
                 size(ViewSizeResolver(root))
             }
 
-            idPerson.text = newPerson.data.idApi.toString()
-            textNameView.text = newPerson.data.nameApi
+            idPerson.text = person.idApi.toString()
+            textNameView.text = person.nameApi
             root.setOnClickListener {
-                onUserClicked(newPerson)
+                onUserClicked(person)
             }
         }
 

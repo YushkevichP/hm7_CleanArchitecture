@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hm7_cleanarchitecture.PersonRepository
+import com.example.hm7_cleanarchitecture.model.LceState
 import com.example.hm7_cleanarchitecture.model.Person
 
 import kotlinx.coroutines.channels.BufferOverflow
@@ -16,13 +17,14 @@ class ListViewModel(
 
     private var isLoading = false
     private var currentPage = 1
+    private var hasMoreData = true
+
     private val loadMoreFlow = MutableSharedFlow<LoadState>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST, extraBufferCapacity = 0
     )
     private var isRefreshed = false
 
     val dataFlow = loadMoreFlow
-        .filter { !isLoading }
         .onEach {
             isLoading = true
             if (it == LoadState.REFRESH) {
@@ -35,16 +37,24 @@ class ListViewModel(
             personRepository.fetchPersons(currentPage)
                 .fold(
                     onSuccess = {
-                        Log.d("INIT", "Подгрузилось из сети , current page $currentPage")
-                        it
+                        Log.d("check", "Подгрузилось из сети , current page $currentPage")
+
+                        //еслм прийдет меньше 20, то это последняя страница и далее не нужно делать onloadMore
+                        if (it.size < PAGE_SIZE) {
+                            Log.d("check", it.size.toString())
+
+                            hasMoreData = false
+                        }
+                        LceState.Content(it, hasMoreData)
                     },
                     onFailure = {
-                        (personRepository.getPersonsFromDB(PAGE_SIZE, 0, currentPage))
+                        val cache = (personRepository.getPersonsFromDB(PAGE_SIZE, 0, currentPage))
+                        LceState.Content(cache, throwable = it)
                     }
                 )
         }
         .onEach {
-            personRepository.insertPersons(it.map {
+            personRepository.insertPersons(it.data.map {
                 Person(
                     idApi = it.idApi,
                     nameApi = it.nameApi,
@@ -53,18 +63,19 @@ class ListViewModel(
             })
             isLoading = false
             currentPage++
-            Log.d("INIT", "Увеличили страничку только что , current page $currentPage")
+            Log.d("check", "Увеличили страничку только что , current page $currentPage")
         }
         .runningReduce { accumulator, value ->
             if (!isRefreshed) {
-                accumulator + value
+                val currentData = accumulator.data + value.data
+                LceState.Content(data = currentData, hasMoreData = value.hasMoreData)
             } else value
 
         }
         .onStart {
-            Log.d("INIT", "Подгрузилось из бд page size is $PAGE_SIZE, current page $currentPage")
-            emit(personRepository.getPersonsFromDB(PAGE_SIZE, 0, currentPage))
-
+            Log.d("check", "Подгрузилось из БД, текущая страница = $currentPage")
+            val cache = personRepository.getPersonsFromDB(PAGE_SIZE, 0, currentPage)
+            emit(LceState.Content(cache))
         }
         .shareIn(
             scope = viewModelScope,
@@ -73,7 +84,11 @@ class ListViewModel(
         )
 
     fun onLoadMore() {
-        loadMoreFlow.tryEmit(LoadState.LOAD_MORE)
+
+        // проверка на ислоадинг, т.к. порой сразу лишние страницы прогружало
+        if (!isLoading && hasMoreData) {
+            loadMoreFlow.tryEmit(LoadState.LOAD_MORE)
+        }
     }
 
     fun onRefresh() {
@@ -92,5 +107,3 @@ class ListViewModel(
         LOAD_MORE, REFRESH
     }
 }
-
-//todo странно работает паджинация, грузит сразу по 2 странички, нужно разобраться

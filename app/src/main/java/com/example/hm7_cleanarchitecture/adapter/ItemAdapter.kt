@@ -16,7 +16,7 @@ import com.example.hm7_cleanarchitecture.model.ItemType
 
 class ItemAdapter(
     context: Context,
-    private val onUserClicked: (ItemType<Person>) -> Unit,
+    private val onUserClicked: (Person) -> Unit,
 ) : ListAdapter<ItemType<Person>, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     val layoutInflater = LayoutInflater.from(context)
@@ -55,7 +55,7 @@ class ItemAdapter(
             TYPE_CONTENT -> {
                 val personVH = holder as? PersonViewHolder ?: return
                 val item = getItem(position) as? ItemType.Content ?: return
-                personVH.bind(item)
+                personVH.bind(item.data)
             }
         }
     }
@@ -71,7 +71,11 @@ class ItemAdapter(
                 oldItem: ItemType<Person>,
                 newItem: ItemType<Person>,
             ): Boolean {
-                return oldItem == newItem
+
+                val oldPersonItem = oldItem as? ItemType.Content ?: return false
+                val newPersonItem = newItem as? ItemType.Content ?: return false
+
+                return oldPersonItem.data.idApi == newPersonItem.data.idApi
             }
 
             override fun areContentsTheSame(
@@ -82,8 +86,7 @@ class ItemAdapter(
                 val oldPersonItem = oldItem as? ItemType.Content ?: return false
                 val newPersonItem = newItem as? ItemType.Content ?: return false
 
-                return (oldPersonItem.data.idApi == newPersonItem.data.idApi
-                        && oldPersonItem.data.imageApi == newPersonItem.data.imageApi
+                return (oldPersonItem.data.imageApi == newPersonItem.data.imageApi
                         && oldPersonItem.data.nameApi == newPersonItem.data.nameApi)
             }
         }

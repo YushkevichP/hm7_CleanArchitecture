@@ -5,6 +5,7 @@ import com.example.hm7_cleanarchitecture.database.AppDatabase
 import org.koin.dsl.module
 
 val databaseModule = module {
+
     single {
         Room.databaseBuilder(
             get(), //дает нам уже готовый из койна

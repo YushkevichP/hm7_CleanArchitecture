@@ -2,10 +2,12 @@ package com.example.hm7_cleanarchitecture.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.lifecycleScope
@@ -29,17 +31,12 @@ class ListFragment : Fragment() {
             "View was destroyed"
         }
 
-    //denendancy injection if needed repo or db
-    // private val persontRepository by inject<PersonRepository>()
-    // private val appDataBase by inject<AppDatabase>()
-
     private val viewModel by viewModel<ListViewModel>()
 
     private val personAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        ItemAdapter(requireContext()) { item ->
-            val personItem = item as? ItemType.Content ?: return@ItemAdapter
+        ItemAdapter(requireContext()) { person ->
             findNavController().navigate(
-                ListFragmentDirections.toDetails(personItem.data.idApi)
+                ListFragmentDirections.toDetails(person.idApi)
             )
         }
     }
@@ -59,12 +56,33 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
             viewModel.dataFlow
-                .onEach {
-                    personAdapter.submitList(it.map {
-                        ItemType.Content(it)
-                    } + ItemType.Loading)
+                .onEach { lce ->
+                    if (lce.data.isNotEmpty()){
+                        //крутелка работает, только когда список пуст (припервой подгрукзке)
+                        binding.progressCircular.isVisible = false
+                    }
+                    Log.d("check", lce.hasMoreData.toString())
 
+                        // проверяем и если посл эл-т то убираем крутелку
+                    val pageList = if (lce.hasMoreData && lce.data.isNotEmpty()){
+                        lce.data.map {
+                            ItemType.Content(it)
+                        } + ItemType.Loading
+                    } else{
+                        lce.data.map {
+                            ItemType.Content(it)
+                        }
+                    }
+
+                    personAdapter.submitList(pageList)
                     binding.swipeLayout.isRefreshing = false
+
+                    if (!lce.throwable?.message.isNullOrBlank()) {
+                        Toast.makeText(requireContext(),
+                            lce.throwable?.message ?: "",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
