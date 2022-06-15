@@ -2,6 +2,7 @@ package com.example.hm7_cleanarchitecture.data.api
 
 
 import com.example.hm7_cleanarchitecture.data.model.PersonDTO
+import com.example.hm7_cleanarchitecture.data.model.PersonDetailsDTO
 
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,9 +17,9 @@ interface PersonApi {
         @Query("page") page: Int,
         ): List<PersonDTO>
 
-//    @GET("character/{id}")
-//    suspend fun getPersonDetailsFromApi(
-//        @Path("id") id: Int, // Path -подставление значения в какой-то запрос.
-//    ):PersonDetails
+    @GET("character/{id}")
+    suspend fun getPersonDetailsFromApi(
+        @Path("id") id: Int, // Path -подставление значения в какой-то запрос.
+    ):PersonDetailsDTO
 
 }

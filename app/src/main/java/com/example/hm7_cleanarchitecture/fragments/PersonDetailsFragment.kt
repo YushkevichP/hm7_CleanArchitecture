@@ -1,9 +1,11 @@
 package com.example.hm7_cleanarchitecture.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -11,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import coil.load
 import com.example.hm7_cleanarchitecture.databinding.FragmentPersonDetailsBinding
+import com.example.hm7_cleanarchitecture.utilities.networkChangeFlow
 import com.example.hm7_cleanarchitecture.viewmodels.PersonDetailsViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -59,9 +62,24 @@ class PersonDetailsFragment : Fragment() {
                             personStatus.text = it.status
                         }
                     },
-                    onFailure = { error("SOMTH WENT WRONG") }
+                    onFailure = { Toast.makeText(requireContext(),
+                        it.message.toString(),
+                        Toast.LENGTH_LONG).show() }
                 )
             }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
+        requireContext().networkChangeFlow
+            .onEach {
+                when (it) {
+                    true -> Log.d("check", "Есть конекшн")
+                    false -> Toast.makeText(requireContext(),
+                        "Не працуе канэкшн",
+                        Toast.LENGTH_LONG).show()
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+
     }
 
 
