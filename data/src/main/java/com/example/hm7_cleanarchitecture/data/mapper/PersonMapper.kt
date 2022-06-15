@@ -8,13 +8,13 @@ import com.example.hm7_cleanarchitecture.domain.model.PersonDetails
 
 //два конвертера для перегона персонДТО и Ентити в персон
 
-fun List<PersonDTO>.toDomainModels(): List<Person>{
+internal fun List<PersonDTO>.toDomainModels(): List<Person>{
     return map {
         it.toDomainModel()
     }
 }
 
-fun PersonDTO.toDomainModel(): Person {
+internal fun PersonDTO.toDomainModel(): Person {
     return Person(
         id = id,
         name = namePerson,
@@ -23,14 +23,7 @@ fun PersonDTO.toDomainModel(): Person {
     )
 }
 
-
-//fun List<PersonEntity>.toDomainModels(): List<Person>{
-//    return map {
-//        it.toDomainModel()
-//    }
-//}
-
-fun PersonEntity.toDomainModel(): Person {
+internal fun PersonEntity.toDomainModel(): Person {
     return Person(
         id = id,
         name = name,
@@ -38,3 +31,18 @@ fun PersonEntity.toDomainModel(): Person {
         page = page
     )
 }
+
+//для инсерта в бд хотело сделать что0то такое
+//@JvmName("toDomainModelsPersonEntity")
+//internal fun List<PersonEntity>.toDomainModels(): List<Person>{
+//    return map {
+//        it.toDomainModel()
+//    }
+//}
+
+
+//fun List<PersonEntity>.toDomainModels(): List<Person>{
+//    return map {
+//        it.toDomainModel()
+//    }
+//}

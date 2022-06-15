@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 // сущность для БД
 @Entity
-data class PersonEntity(
+internal data class PersonEntity(
 
     @PrimaryKey
     val id: Int,

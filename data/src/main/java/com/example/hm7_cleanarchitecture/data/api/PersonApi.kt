@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 //https://youtu.be/IDVxFjLeecA?t=10822
 
-interface PersonApi {
+internal interface PersonApi {
 
     @GET("character")
     suspend fun getUsersFromApi(

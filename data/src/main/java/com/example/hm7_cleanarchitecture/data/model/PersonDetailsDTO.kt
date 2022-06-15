@@ -2,7 +2,7 @@ package com.example.hm7_cleanarchitecture.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class PersonDetailsDTO(
+internal data class PersonDetailsDTO(
 
     val id: Int,
     val name: String,

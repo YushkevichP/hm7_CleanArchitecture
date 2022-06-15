@@ -1,11 +1,15 @@
 package com.example.hm7_cleanarchitecture.domain.usecase
 
 import com.example.hm7_cleanarchitecture.domain.model.Person
-import com.example.hm7_cleanarchitecture.domain.repository.PersonRepository
+import com.example.hm7_cleanarchitecture.domain.repository.PersonLocalRepository
+import com.example.hm7_cleanarchitecture.domain.repository.PersonRemoteRepository
 
-class GetPersonUseCase(private val personRepository: PersonRepository) {
+class GetPersonUseCase(
+    private val personRemoteRepository: PersonRemoteRepository,
+    private val personLocalRepository: PersonLocalRepository
+    ) {
 
     suspend operator fun invoke(page:Int) : Result<List<Person>>{
-        return personRepository.getPerson(page = page)
+        return personRemoteRepository.getPerson(page = page)
     }
 }

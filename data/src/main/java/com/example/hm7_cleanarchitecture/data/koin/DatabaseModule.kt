@@ -4,7 +4,7 @@ import androidx.room.Room
 import com.example.hm7_cleanarchitecture.data.database.AppDatabase
 import org.koin.dsl.module
 
-val databaseModule = module {
+internal val databaseModule = module {
 
     single {
         Room.databaseBuilder(

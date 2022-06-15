@@ -4,7 +4,7 @@ import com.example.hm7_cleanarchitecture.domain.model.Person
 import com.example.hm7_cleanarchitecture.domain.model.PersonDetails
 
 // здесь вся логика взаимодействия с системой.
-interface PersonRepository {
+interface PersonRemoteRepository {
 
     suspend fun getPerson(page: Int): Result<List<Person>>
 

@@ -30,10 +30,7 @@ class PersonDetailsFragment : Fragment() {
         }
 
     private val args by navArgs<PersonDetailsFragmentArgs>()
-
     private val viewModel by viewModel<PersonDetailsViewModel> { parametersOf(args.keyId) }
-
-
 
 
     override fun onCreateView(
@@ -62,9 +59,11 @@ class PersonDetailsFragment : Fragment() {
                             personStatus.text = it.status
                         }
                     },
-                    onFailure = { Toast.makeText(requireContext(),
-                        it.message.toString(),
-                        Toast.LENGTH_LONG).show() }
+                    onFailure = {
+                        Toast.makeText(requireContext(),
+                            it.message.toString(),
+                            Toast.LENGTH_LONG).show()
+                    }
                 )
             }.launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -78,11 +77,7 @@ class PersonDetailsFragment : Fragment() {
                         Toast.LENGTH_LONG).show()
                 }
             }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-
     }
-
-
 
 
     override fun onDestroyView() {
@@ -104,7 +99,6 @@ class PersonDetailsFragment : Fragment() {
 //    }
 
 
-
 //    private fun getDetails(id: Int) {
 //        viewLifecycleOwner.lifecycleScope.launch {
 //            Log.d("LOG", "ВЬЮ МОДЕЛЬ ДОЛЖНА ВКЛ")
@@ -120,8 +114,6 @@ class PersonDetailsFragment : Fragment() {
 //            }?.launchIn(viewLifecycleOwner.lifecycleScope)
 //        }
 //    }
-
-
 
 
 // можно запускать вот так, одно и то же

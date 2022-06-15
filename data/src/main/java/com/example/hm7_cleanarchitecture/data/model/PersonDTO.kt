@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 // серверная сущность
-data class PersonDTO(
+internal data class PersonDTO(
 
     @SerializedName("id")
     val id: Int,

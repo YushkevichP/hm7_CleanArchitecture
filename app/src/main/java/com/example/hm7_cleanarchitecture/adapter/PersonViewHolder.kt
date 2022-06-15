@@ -5,8 +5,7 @@ import coil.load
 import coil.size.Scale
 import coil.size.ViewSizeResolver
 import com.example.hm7_cleanarchitecture.databinding.ItemPersonBinding
-import com.example.hm7_cleanarchitecture.model.Person
-import com.example.hm7_cleanarchitecture.model.ItemType
+import com.example.hm7_cleanarchitecture.domain.model.Person
 
 
 class PersonViewHolder(
@@ -17,13 +16,13 @@ class PersonViewHolder(
     fun bind(person: Person) {
 
         with(binding) {
-            imageView.load(person.imageApi) {
+            imageView.load(person.imageUrl) {
                 scale(Scale.FILL)
                 size(ViewSizeResolver(root))
             }
 
-            idPerson.text = person.idApi.toString()
-            textNameView.text = person.nameApi
+            idPerson.text = person.id.toString()
+            textNameView.text = person.name
             root.setOnClickListener {
                 onUserClicked(person)
             }

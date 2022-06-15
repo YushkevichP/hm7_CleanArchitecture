@@ -6,6 +6,6 @@ import com.example.hm7_cleanarchitecture.data.model.PersonEntity
 
 
 @Database(entities = [PersonEntity::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
+internal abstract class AppDatabase : RoomDatabase() {
     abstract fun personDao(): PersonDao
 }

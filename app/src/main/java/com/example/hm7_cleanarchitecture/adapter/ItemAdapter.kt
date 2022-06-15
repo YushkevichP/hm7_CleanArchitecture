@@ -10,7 +10,8 @@ import com.example.hm7_cleanarchitecture.adapter.LoadingViewHolder
 import com.example.hm7_cleanarchitecture.adapter.PersonViewHolder
 import com.example.hm7_cleanarchitecture.databinding.ItemLoadingBinding
 import com.example.hm7_cleanarchitecture.databinding.ItemPersonBinding
-import com.example.hm7_cleanarchitecture.model.Person
+import com.example.hm7_cleanarchitecture.domain.model.Person
+
 import com.example.hm7_cleanarchitecture.model.ItemType
 
 
@@ -75,7 +76,7 @@ class ItemAdapter(
                 val oldPersonItem = oldItem as? ItemType.Content ?: return false
                 val newPersonItem = newItem as? ItemType.Content ?: return false
 
-                return oldPersonItem.data.idApi == newPersonItem.data.idApi
+                return oldPersonItem.data.id == newPersonItem.data.id
             }
 
             override fun areContentsTheSame(
@@ -86,8 +87,8 @@ class ItemAdapter(
                 val oldPersonItem = oldItem as? ItemType.Content ?: return false
                 val newPersonItem = newItem as? ItemType.Content ?: return false
 
-                return (oldPersonItem.data.imageApi == newPersonItem.data.imageApi
-                        && oldPersonItem.data.nameApi == newPersonItem.data.nameApi)
+                return (oldPersonItem.data.imageUrl == newPersonItem.data.imageUrl
+                        && oldPersonItem.data.imageUrl == newPersonItem.data.imageUrl)
             }
         }
     }

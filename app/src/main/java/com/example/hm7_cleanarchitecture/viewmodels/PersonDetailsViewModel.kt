@@ -2,16 +2,16 @@ package com.example.hm7_cleanarchitecture.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hm7_cleanarchitecture.PersonRepository
+import com.example.hm7_cleanarchitecture.domain.repository.PersonRemoteRepository
 import kotlinx.coroutines.flow.*
 
 class PersonDetailsViewModel(
     private val id: Int,
-    private val personRepository: PersonRepository,
+    private val personRemoteRepository: PersonRemoteRepository,
 ) : ViewModel() {
 
     val dataFlow = flow {
-        emit(personRepository.fetchPersonDetails(id = id)
+        emit(personRemoteRepository.getPersonDetails(id = id)
         )
     }
         .shareIn(

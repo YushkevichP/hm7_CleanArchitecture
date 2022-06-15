@@ -1,6 +1,7 @@
 package com.example.hm7_cleanarchitecture.fragments
 
 import android.annotation.SuppressLint
+import android.content.ClipData
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,7 +37,7 @@ class ListFragment : Fragment() {
     private val personAdapter by lazy(LazyThreadSafetyMode.NONE) {
         ItemAdapter(requireContext()) { person ->
             findNavController().navigate(
-                ListFragmentDirections.toDetails(person.idApi)
+                ListFragmentDirections.toDetails(person.id)
             )
         }
     }
@@ -55,36 +56,38 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            viewModel.dataFlow
-                .onEach { lce ->
-                    if (lce.data.isNotEmpty()){
-                        //крутелка работает, только когда список пуст (припервой подгрукзке)
-                        binding.progressCircular.isVisible = false
-                    }
-                    Log.d("checkMyApp", "HasMoreData? -->${lce.hasMoreData.toString()}")
 
-                        // проверяем и если посл эл-т то убираем крутелку
-                    val pageList = if (lce.hasMoreData && lce.data.isNotEmpty()){
-                        lce.data.map {
-                            ItemType.Content(it)
-                        } + ItemType.Loading
-                    } else{
-                        lce.data.map {
-                            ItemType.Content(it)
-                        }
-                    }
 
-                    personAdapter.submitList(pageList)
-                    binding.swipeLayout.isRefreshing = false
-
-                    if (!lce.throwable?.message.isNullOrBlank()) {
-                        Toast.makeText(requireContext(),
-                            lce.throwable?.message ?: "",
-                            Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+//            viewModel.dataFlow
+//                .onEach { lce ->
+//                    if (lce.data.isNotEmpty()){
+//                        //крутелка работает, только когда список пуст (припервой подгрукзке)
+//                        binding.progressCircular.isVisible = false
+//                    }
+//                    Log.d("checkMyApp", "HasMoreData? -->${lce.hasMoreData.toString()}")
+//
+//                        // проверяем и если посл эл-т то убираем крутелку
+//                    val pageList = if (lce.hasMoreData && lce.data.isNotEmpty()){
+//                        lce.data.map {
+//                            ItemType.Content(it)
+//                        } + ItemType.Loading
+//                    } else{
+//                        lce.data.map {
+//                            ItemType.Content(it)
+//                        }
+//                    }
+//
+//                    personAdapter.submitList(pageList)
+//                    binding.swipeLayout.isRefreshing = false
+//
+//                    if (!lce.throwable?.message.isNullOrBlank()) {
+//                        Toast.makeText(requireContext(),
+//                            lce.throwable?.message ?: "",
+//                            Toast.LENGTH_SHORT)
+//                            .show()
+//                    }
+//                }
+//                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         // запихунть куда-то, чтоб не отображалось постаянно / или в тру ничего не делать.
         requireContext().networkChangeFlow
@@ -114,7 +117,6 @@ class ListFragment : Fragment() {
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
         }
-
 
     }
 

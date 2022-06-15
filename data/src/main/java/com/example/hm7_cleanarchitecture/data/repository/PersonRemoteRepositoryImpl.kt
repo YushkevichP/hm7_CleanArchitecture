@@ -5,9 +5,11 @@ import com.example.hm7_cleanarchitecture.data.mapper.toDomainModel
 import com.example.hm7_cleanarchitecture.data.mapper.toDomainModels
 import com.example.hm7_cleanarchitecture.domain.model.Person
 import com.example.hm7_cleanarchitecture.domain.model.PersonDetails
-import com.example.hm7_cleanarchitecture.domain.repository.PersonRepository
+import com.example.hm7_cleanarchitecture.domain.repository.PersonRemoteRepository
 
-class PersonRepositoryImpl(private val personApi: PersonApi) : PersonRepository {
+internal class PersonRemoteRepositoryImpl(
+    private val personApi: PersonApi,
+) : PersonRemoteRepository {
 
     override suspend fun getPerson(page: Int): Result<List<Person>> {
         return runCatching {
