@@ -16,6 +16,6 @@ internal interface PersonDao {
     suspend fun getSomePersons(limit: Int, offset: Int, page: Int): List<PersonEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPersons(list: List<Person>)
+    suspend fun insertPersons(list: List<PersonEntity>)
 
 }

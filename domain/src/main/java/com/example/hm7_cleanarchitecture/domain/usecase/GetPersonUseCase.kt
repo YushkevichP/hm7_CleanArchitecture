@@ -5,11 +5,11 @@ import com.example.hm7_cleanarchitecture.domain.repository.PersonLocalRepository
 import com.example.hm7_cleanarchitecture.domain.repository.PersonRemoteRepository
 
 class GetPersonUseCase(
-    private val personRemoteRepository: PersonRemoteRepository,
-    private val personLocalRepository: PersonLocalRepository
+    private val remoteRepository: PersonRemoteRepository,
+    private val localRepository: PersonLocalRepository
     ) {
 
     suspend operator fun invoke(page:Int) : Result<List<Person>>{
-        return personRemoteRepository.getPerson(page = page)
+        return remoteRepository.getPerson(page = page)
     }
 }

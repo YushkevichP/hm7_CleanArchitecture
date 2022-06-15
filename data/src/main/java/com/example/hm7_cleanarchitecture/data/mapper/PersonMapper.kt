@@ -8,7 +8,7 @@ import com.example.hm7_cleanarchitecture.domain.model.PersonDetails
 
 //два конвертера для перегона персонДТО и Ентити в персон
 
-internal fun List<PersonDTO>.toDomainModels(): List<Person>{
+internal fun List<PersonDTO>.toDomainModels(): List<Person> {
     return map {
         it.toDomainModel()
     }
@@ -25,6 +25,15 @@ internal fun PersonDTO.toDomainModel(): Person {
 
 internal fun PersonEntity.toDomainModel(): Person {
     return Person(
+        id = id,
+        name = name,
+        imageUrl = imageUrl,
+        page = page
+    )
+}
+
+internal fun Person.toPersonEntity(): PersonEntity {
+    return PersonEntity(
         id = id,
         name = name,
         imageUrl = imageUrl,
