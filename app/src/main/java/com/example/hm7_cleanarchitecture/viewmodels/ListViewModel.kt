@@ -33,15 +33,15 @@ class ListViewModel(
             } else isRefreshed = false
         }
         .map {
-            delay(1000)
+      //      delay(1000)
             personRepository.fetchPersons(currentPage)
                 .fold(
                     onSuccess = {
-                        Log.d("check", "Подгрузилось из сети , current page $currentPage")
+                        Log.d("checkMyApp", "Подгрузилось из сети , current page $currentPage")
 
                         //еслм прийдет меньше 20, то это последняя страница и далее не нужно делать onloadMore
                         if (it.size < PAGE_SIZE) {
-                            Log.d("check", it.size.toString())
+                            Log.d("checkMyApp", it.size.toString())
 
                             hasMoreData = false
                         }
@@ -63,7 +63,7 @@ class ListViewModel(
             })
             isLoading = false
             currentPage++
-            Log.d("check", "Увеличили страничку только что , current page $currentPage")
+            Log.d("checkMyApp", "Увеличили страничку только что , current page $currentPage")
         }
         .runningReduce { accumulator, value ->
             if (!isRefreshed) {
@@ -73,7 +73,7 @@ class ListViewModel(
 
         }
         .onStart {
-            Log.d("check", "Подгрузилось из БД, текущая страница = $currentPage")
+            Log.d("checkMyApp", "Подгрузилось из БД, текущая страница = $currentPage")
             val cache = personRepository.getPersonsFromDB(PAGE_SIZE, 0, currentPage)
             emit(LceState.Content(cache))
         }
@@ -100,7 +100,7 @@ class ListViewModel(
     }
 
     companion object {
-        private const val PAGE_SIZE = 3
+        private const val PAGE_SIZE = 20
     }
 
     enum class LoadState {

@@ -56,16 +56,18 @@ dependencies {
     def coil_version = "1.4.0"
     implementation "io.coil-kt:coil:$coil_version"
 
-    //retrofit
-    def retrofit_version = "2.9.0"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
 
     //SwipeToRefresh
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     //SQlite
     implementation "androidx.sqlite:sqlite-ktx:2.2.0"
+
+    //retrofit
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     //Room database
     def roomVersion = "2.4.1"
@@ -76,6 +78,16 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.4.1"
 
     //koin
-    def koinVersions  = "3.1.5"
+
+    def koinVersions  = "3.2.0"
     implementation "io.insert-koin:koin-android:$koinVersions"
+
+    //Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+
+    //Lifecycle (coroutines?)
+    def coroutinesLifecycleVersion = "2.4.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$coroutinesLifecycleVersion"
+
+
 }

@@ -29,7 +29,8 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:adjustViewBounds="false"
-            android:paddingTop="20dp" />
+            android:paddingTop="20dp"
+            tools:src="@color/purple_200"/>
 
         <TextView
             android:id="@+id/person_name"

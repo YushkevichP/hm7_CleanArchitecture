@@ -61,7 +61,7 @@ class ListFragment : Fragment() {
                         //крутелка работает, только когда список пуст (припервой подгрукзке)
                         binding.progressCircular.isVisible = false
                     }
-                    Log.d("check", lce.hasMoreData.toString())
+                    Log.d("checkMyApp", "HasMoreData? -->${lce.hasMoreData.toString()}")
 
                         // проверяем и если посл эл-т то убираем крутелку
                     val pageList = if (lce.hasMoreData && lce.data.isNotEmpty()){
@@ -98,7 +98,7 @@ class ListFragment : Fragment() {
                 }
             }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        //recycler init
+
         with(binding) {
             val layoutManager = LinearLayoutManager(requireContext())
             recyclerView.layoutManager = layoutManager
@@ -108,9 +108,7 @@ class ListFragment : Fragment() {
                 viewModel.onRefresh()
             }
 
-            //todo при первой подгрузке после кеша паджинешн
-            // оказывается внизу списка
-            recyclerView.addPaginationScrollFlow(layoutManager, 1)
+            recyclerView.addPaginationScrollFlow(layoutManager, 6)
                 .onEach {
                    viewModel.onLoadMore()
                 }
