@@ -14,17 +14,16 @@ internal class PersonRemoteRepositoryImpl(
     override suspend fun getPerson(page: Int): Result<List<Person>> {
         return runCatching {
             personApi.getUsersFromApi(page)
-        }.map {
-            it.toDomainModels()
+                .results
+                .map {personDTO ->
+                    personDTO.toDomainModel()
+                }
         }
     }
 
     override suspend fun getPersonDetails(id: Int): Result<PersonDetails> {
-
         return runCatching {
-            personApi.getPersonDetailsFromApi(id)
-        }.map {
-            it.toDomainModel()
+            personApi.getPersonDetailsFromApi(id).toDomainModel()
         }
     }
 }

@@ -10,14 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hm7_cleanarchitecture.ItemAdapter
 import com.example.hm7_cleanarchitecture.R
 import com.example.hm7_cleanarchitecture.databinding.FragmentListBinding
-import com.example.hm7_cleanarchitecture.model.ItemType
+import com.example.hm7_cleanarchitecture.domain.model.ItemType
+import com.example.hm7_cleanarchitecture.domain.model.LceState
 import com.example.hm7_cleanarchitecture.utilities.networkChangeFlow
 import com.example.hm7_cleanarchitecture.viewmodels.ListViewModel
 import kotlinx.coroutines.flow.*
@@ -57,9 +57,21 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        viewModel.dataFlow
+            .onEach { uiState ->
+                val pageList = uiState.persons.map {
+                    ItemType.Content(it)
+                }
+                personAdapter.submitList(pageList)
+
+                binding.progressCircular.isVisible = uiState.isLoading
+                binding.swipeLayout.isRefreshing = false
+
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+
 
 //            viewModel.dataFlow
-//                .onEach { lce ->
+//                .onEach { lce->
 //                    if (lce.data.isNotEmpty()){
 //                        //крутелка работает, только когда список пуст (припервой подгрукзке)
 //                        binding.progressCircular.isVisible = false
@@ -88,21 +100,23 @@ class ListFragment : Fragment() {
 //                    }
 //                }
 //                .launchIn(viewLifecycleOwner.lifecycleScope)
+//
+//        // запихунть куда-то, чтоб не отображалось постаянно / или в тру ничего не делать.
+//        requireContext().networkChangeFlow
+//            .onEach
+//        {
+//            when (it) {
+//                true -> Toast.makeText(requireContext(), "Працуе канэкшн", Toast.LENGTH_LONG)
+//                    .show()
+//                false -> Toast.makeText(requireContext(),
+//                    "Не працуе канэкшн",
+//                    Toast.LENGTH_LONG).show()
+//            }
+//        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        // запихунть куда-то, чтоб не отображалось постаянно / или в тру ничего не делать.
-        requireContext().networkChangeFlow
-            .onEach {
-                when (it) {
-                    true -> Toast.makeText(requireContext(), "Працуе канэкшн", Toast.LENGTH_LONG)
-                        .show()
-                    false -> Toast.makeText(requireContext(),
-                        "Не працуе канэкшн",
-                        Toast.LENGTH_LONG).show()
-                }
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-
-        with(binding) {
+        with(binding)
+        {
             val layoutManager = LinearLayoutManager(requireContext())
             recyclerView.layoutManager = layoutManager
             recyclerView.adapter = personAdapter
@@ -113,11 +127,10 @@ class ListFragment : Fragment() {
 
             recyclerView.addPaginationScrollFlow(layoutManager, 6)
                 .onEach {
-                   viewModel.onLoadMore()
+                    viewModel.onLoadMore()
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
         }
-
     }
 
     override fun onDestroyView() {

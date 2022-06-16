@@ -1,4 +1,4 @@
-package com.example.hm7_cleanarchitecture.model
+package com.example.hm7_cleanarchitecture.domain.model
 
 
 sealed class ItemType<out T> {

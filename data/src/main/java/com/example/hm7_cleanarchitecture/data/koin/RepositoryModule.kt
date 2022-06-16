@@ -10,15 +10,11 @@ import org.koin.dsl.module
 
 internal val repositoryModule = module {
 
-    //create PersonRepository // передаем по интерфейсу https://youtu.be/aZqDFzYzTzc?t=9463
-    // можно так (передаем по интерфейсу)
-//    single<PersonRepository> {
-//        PersonRepositoryImpl(get())
-//    }
-    // можно так
+    singleOf(::PersonRemoteRepositoryImpl) {
+        bind<PersonRemoteRepository>()
+    }
 
-    singleOf(::PersonRemoteRepositoryImpl) { bind<PersonRemoteRepository>() }
-    singleOf(::PersonLocalRepositoryImpl) { bind<PersonLocalRepository>() }
-
-
+    singleOf(::PersonLocalRepositoryImpl) {
+        bind<PersonLocalRepository>()
+    }
 }

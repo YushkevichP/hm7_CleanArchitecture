@@ -7,12 +7,6 @@ import com.example.hm7_cleanarchitecture.domain.model.PersonDetails
 interface PersonRemoteRepository {
 
     suspend fun getPerson(page: Int): Result<List<Person>>
-
     suspend fun getPersonDetails(id: Int): Result<PersonDetails>
-
-
-
-//  suspend fun getPersonsFromDB(limit: Int, offset: Int, page: Int)
-//  suspend fun insertPersons(list: List<Person>)
 
 }

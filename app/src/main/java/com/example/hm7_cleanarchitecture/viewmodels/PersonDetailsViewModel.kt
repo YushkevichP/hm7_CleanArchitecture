@@ -19,11 +19,4 @@ class PersonDetailsViewModel(
         started = SharingStarted.Lazily,
         replay = 1
     )
-
-
-//    suspend fun fetchDetails(id: Int): Flow<PersonDetails>? {
-//        return personRepository.fetchPersonDetails(id)
-//            .map {
-//                flowOf(it)
-//            }.getOrNull()
 }

@@ -10,9 +10,9 @@ import com.example.hm7_cleanarchitecture.adapter.LoadingViewHolder
 import com.example.hm7_cleanarchitecture.adapter.PersonViewHolder
 import com.example.hm7_cleanarchitecture.databinding.ItemLoadingBinding
 import com.example.hm7_cleanarchitecture.databinding.ItemPersonBinding
+import com.example.hm7_cleanarchitecture.domain.model.ItemType
 import com.example.hm7_cleanarchitecture.domain.model.Person
 
-import com.example.hm7_cleanarchitecture.model.ItemType
 
 
 class ItemAdapter(

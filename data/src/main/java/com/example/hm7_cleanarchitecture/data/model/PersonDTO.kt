@@ -5,6 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+internal data class Response(
+    @SerializedName("results")
+    val results: List<PersonDTO>,
+)
+
 // серверная сущность
 internal data class PersonDTO(
 
@@ -17,6 +22,6 @@ internal data class PersonDTO(
     @SerializedName("image")
     val imageUrl: String,
 
-    val page: Int,
-
-    )
+    @SerializedName("page")
+    val page: Int
+)

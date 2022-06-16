@@ -12,8 +12,8 @@ import com.example.hm7_cleanarchitecture.domain.model.Person
 @Dao
 internal interface PersonDao {
 
-    @Query("SELECT * FROM personentity WHERE (:page) LIKE page LIMIT :limit OFFSET :offset")
-    suspend fun getSomePersons(limit: Int, offset: Int, page: Int): List<PersonEntity>
+    @Query("SELECT * FROM personentity WHERE (:page) LIKE page LIMIT :limit")
+    suspend fun getSomePersons(limit: Int, page: Int): List<PersonEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPersons(list: List<PersonEntity>)

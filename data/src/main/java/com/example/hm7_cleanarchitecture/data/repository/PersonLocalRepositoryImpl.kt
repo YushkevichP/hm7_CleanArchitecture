@@ -13,33 +13,17 @@ internal class PersonLocalRepositoryImpl(
 
     override suspend fun getPersonsFromDB(
         limit: Int,
-        offset: Int,
         page: Int,
-    ): Result<List<Person>> {
+    ): List<Person> {
 
-        return runCatching {
-            personDao.getSomePersons(limit, offset, page)
-        }.map {
-            it.map {
-                it.toDomainModel()
-            }
+        return personDao.getSomePersons(limit, page).map {
+            it.toDomainModel()
         }
+
     }
 
     override suspend fun insertPersons(list: List<Person>) {
-        runCatching {
-            personDao.insertPersons(list.map { it.toPersonEntity() })
-        }
+
+        personDao.insertPersons(list.map { it.toPersonEntity() })
     }
 }
-
-
-//    override suspend fun getPerson(page: Int): Result<List<Person>> {
-//        return runCatching {
-//            personDao.getSomePersons(page, )
-//        }.map { personEntities->
-//            personEntities.map {
-//                it.toDomainModel()
-//            }
-//        }
-//    }
