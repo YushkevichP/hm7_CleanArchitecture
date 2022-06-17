@@ -11,13 +11,3 @@ val viewModelModule = module {
     viewModelOf(::ListViewModel)
     viewModelOf(::PersonDetailsViewModel)
 }
-
-// лучше делать как выше :: - ссылка на функцию/конструторк и тд.
-
-//    viewModel {
-//        ListViewModel(get())
-//    }
-
-// //так передаем параметр какой-то, если нужно
-//viewModel {
-//(id: Int) -> PersonDetailsViewModel(id, get()) }

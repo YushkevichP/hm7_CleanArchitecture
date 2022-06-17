@@ -25,6 +25,7 @@ class GetPersonUseCase(
                     }
                 )
         }.onStart {
+
             emit(LceState.Loading)
         }
 }

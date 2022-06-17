@@ -52,23 +52,3 @@ fun RecyclerView.addPaginationScrollFlow(
 }
 
 
-
-
-// fun RecyclerView.addPaginationScrollFlow(
-//    layoutManager: LinearLayoutManager,
-//    itemsToLoad: Int,
-//    onLoadMore: () -> Unit,
-//) {
-//    addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//            super.onScrolled(recyclerView, dx, dy)
-//
-//            val totalItemCount = layoutManager.itemCount
-//            val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-//            if (dy != 0 && totalItemCount <= (lastVisibleItem + itemsToLoad)) {
-//                recyclerView.post(onLoadMore)
-//            }
-//        }
-//    })
-//}
-

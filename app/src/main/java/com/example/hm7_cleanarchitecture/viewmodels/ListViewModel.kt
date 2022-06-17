@@ -18,7 +18,7 @@ class ListViewModel(
 
     private var isLoading = false
     private var currentPage = 1
-    private var hasMoreData = true
+   // private var hasMoreData = true
     private var isRefreshed = false
 
     private val loadMoreFlow = MutableSharedFlow<LoadState>(
@@ -33,8 +33,8 @@ class ListViewModel(
             isLoading = true
             if (it == LoadState.REFRESH) {
                 isRefreshed = true
-                currentPage = 1
                 list = emptyList()
+                currentPage = 1
             } else isRefreshed = false
         }
         .flatMapLatest {
@@ -47,15 +47,16 @@ class ListViewModel(
                     currentPage++
                     state.copy(persons = list, isLoading = false, throwable = null)
                 }
+
                 is LceState.Error -> {
                     state.copy(isLoading = false, throwable = lce.throwable)
                 }
+
                 LceState.Loading -> {
                     state.copy(isLoading = true)
                 }
             }
-        }
-        .shareIn(
+        }.shareIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
             replay = 1
@@ -89,10 +90,12 @@ class ListViewModel(
     }
 
     fun onLoadMore() {
+
         loadMoreFlow.tryEmit(LoadState.LOAD_MORE)
     }
 
     fun onRefresh() {
+
         loadMoreFlow.tryEmit(LoadState.REFRESH)
     }
 

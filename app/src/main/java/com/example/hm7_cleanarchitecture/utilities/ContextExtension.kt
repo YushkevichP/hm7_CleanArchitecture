@@ -52,38 +52,3 @@ val Context.networkChangeFlow: Flow<Boolean>
     }
         .onStart {
         }
-
-
-//val Context.isNetworkAvailable: Boolean
-//    get() = getSystemService<ConnectivityManager>()?.let { manager ->
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            manager.getNetworkCapabilities(manager.activeNetwork)
-//                ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-//        } else {
-//            manager.activeNetworkInfo?.isConnected
-//        }
-//    } ?: false
-
-
-//private fun networkState() {
-//    val connectManager = requireContext().getSystemService<ConnectivityManager>()
-//    val request = NetworkRequest.Builder()
-//        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-//        .build()
-//
-//    connectManager?.registerNetworkCallback(
-//        request,
-//        object : ConnectivityManager.NetworkCallback() {
-//            override fun onAvailable(network: Network) {
-//                super.onAvailable(network)
-//                Toast.makeText(requireContext(), "AVAILABLE CONNECTION", Toast.LENGTH_SHORT)
-//                    .show()
-//            }
-//
-//            override fun onLost(network: Network) {
-//                super.onLost(network)
-//                Toast.makeText(requireContext(), "Lost connection!", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    )
-//}

@@ -59,9 +59,14 @@ class ListFragment : Fragment() {
 
         viewModel.dataFlow
             .onEach { uiState ->
-                val pageList = uiState.persons.map {
+                val pageList = if (uiState.persons.isNotEmpty()) {
+                    uiState.persons.map {
+                        ItemType.Content(it)
+                    } + ItemType.Loading
+                } else uiState.persons.map{
                     ItemType.Content(it)
                 }
+
                 personAdapter.submitList(pageList)
 
                 binding.progressCircular.isVisible = uiState.isLoading

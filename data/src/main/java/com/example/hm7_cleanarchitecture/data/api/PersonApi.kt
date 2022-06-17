@@ -8,8 +8,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-//https://youtu.be/IDVxFjLeecA?t=10822
-
 internal interface PersonApi {
 
     @GET("character")

@@ -15,15 +15,12 @@ internal class PersonLocalRepositoryImpl(
         limit: Int,
         page: Int,
     ): List<Person> {
-
         return personDao.getSomePersons(limit, page).map {
             it.toDomainModel()
         }
-
     }
 
     override suspend fun insertPersons(list: List<Person>) {
-
         personDao.insertPersons(list.map { it.toPersonEntity() })
     }
 }
