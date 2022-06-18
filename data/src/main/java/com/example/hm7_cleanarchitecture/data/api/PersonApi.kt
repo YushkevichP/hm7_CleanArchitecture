@@ -13,11 +13,11 @@ internal interface PersonApi {
     @GET("character")
     suspend fun getUsersFromApi(
         @Query("page") page: Int,
-        ): Response
+    ): Response
 
     @GET("character/{id}")
     suspend fun getPersonDetailsFromApi(
         @Path("id") id: Int,
-    ):PersonDetailsDTO
+    ): PersonDetailsDTO
 
 }

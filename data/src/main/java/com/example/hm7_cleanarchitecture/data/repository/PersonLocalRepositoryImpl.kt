@@ -20,7 +20,7 @@ internal class PersonLocalRepositoryImpl(
         }
     }
 
-    override suspend fun insertPersons(list: List<Person>) {
-        personDao.insertPersons(list.map { it.toPersonEntity() })
+    override suspend fun insertPersons(list: List<Person>, page: Int) {
+        personDao.insertPersons(list.map { it.toPersonEntity(page) })
     }
 }

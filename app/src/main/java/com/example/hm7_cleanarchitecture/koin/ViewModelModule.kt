@@ -10,4 +10,5 @@ val viewModelModule = module {
 
     viewModelOf(::ListViewModel)
     viewModelOf(::PersonDetailsViewModel)
+
 }

@@ -32,7 +32,7 @@ internal fun PersonEntity.toDomainModel(): Person {
     )
 }
 
-internal fun Person.toPersonEntity(): PersonEntity {
+internal fun Person.toPersonEntity(page: Int): PersonEntity {
     return PersonEntity(
         id = id,
         name = name,
@@ -41,15 +41,15 @@ internal fun Person.toPersonEntity(): PersonEntity {
     )
 }
 
-//для инсерта в бд хотело сделать что0то такое
+////для инсерта в бд хотело сделать что0то такое
 //@JvmName("toDomainModelsPersonEntity")
 //internal fun List<PersonEntity>.toDomainModels(): List<Person>{
 //    return map {
 //        it.toDomainModel()
 //    }
 //}
-
-
+//
+//
 //fun List<PersonEntity>.toDomainModels(): List<Person>{
 //    return map {
 //        it.toDomainModel()

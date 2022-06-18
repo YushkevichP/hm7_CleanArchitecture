@@ -18,15 +18,13 @@ class ListViewModel(
 
     private var isLoading = false
     private var currentPage = 1
-   // private var hasMoreData = true
+    private var hasMoreData = true
     private var isRefreshed = false
+    private var list = listOf<Person>()
 
     private val loadMoreFlow = MutableSharedFlow<LoadState>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-
-
-    private var list = listOf<Person>()
 
     val dataFlow = loadMoreFlow
         .onEach {
@@ -40,68 +38,54 @@ class ListViewModel(
         .flatMapLatest {
             getPersonUseCase(currentPage)
         }
-        .runningFold(UIState()) { state, lce ->
+        .runningFold(UIState()) {state, lce ->
+
             when (lce) {
                 is LceState.Content -> {
                     list = list + lce.data
                     currentPage++
-                    state.copy(persons = list, isLoading = false, throwable = null)
+                    state.copy(persons = list, hasMoreData = lce.hasMoreData, throwable = null)
                 }
 
                 is LceState.Error -> {
-                    state.copy(isLoading = false, throwable = lce.throwable)
+                    state.copy(throwable = lce.throwable)
                 }
 
-                LceState.Loading -> {
-                    state.copy(isLoading = true)
+                is LceState.Loading -> { // cach
+                    state.copy(persons = lce.data)
                 }
             }
-        }.shareIn(
+        }.onEach {
+            isLoading = false
+        }
+        .shareIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
             replay = 1
         )
-//        .runningReduce { accumulator, value ->
-//            if (!isRefreshed) {
-//                val currentData = accumulator.data + value.data
-//                LceState.Content(data = currentData, hasMoreData = value.hasMoreData)
-//            } else value
-//
-//        }
-//        .onStart {
-//
-//            val cache = personRepository.getPersonsFromDB(PAGE_SIZE, 0, currentPage)
-//            emit(LceState.Content(cache))
-//        }
-
-
-//    val dataFlow = loadMoreFlow
-//        .flatMapLatest {
-//            getPersonUseCase(1)
-//        }.shareIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.Eagerly,
-//            replay = 1
-//        )
-
 
     init {
         onLoadMore()
     }
 
     fun onLoadMore() {
-
-        loadMoreFlow.tryEmit(LoadState.LOAD_MORE)
+        if (!isLoading && hasMoreData) {
+            loadMoreFlow.tryEmit(LoadState.LOAD_MORE)
+        }
     }
 
     fun onRefresh() {
-
         loadMoreFlow.tryEmit(LoadState.REFRESH)
     }
 
     enum class LoadState {
         LOAD_MORE, REFRESH
     }
+
+    companion object {
+        private const val PAGE_SIZE = 20
+    }
+
 }
 
 

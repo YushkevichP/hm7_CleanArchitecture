@@ -13,10 +13,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import coil.load
 import com.example.hm7_cleanarchitecture.databinding.FragmentPersonDetailsBinding
+import com.example.hm7_cleanarchitecture.domain.model.LceState
 import com.example.hm7_cleanarchitecture.utilities.networkChangeFlow
 import com.example.hm7_cleanarchitecture.viewmodels.PersonDetailsViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -48,25 +51,43 @@ class PersonDetailsFragment : Fragment() {
 
         binding.toolbar.setupWithNavController(findNavController()) // back_arrow
 
-        viewModel.dataFlow
-            .onEach {
-                it.fold(
-                    onSuccess = {
-                        with(binding) {
-                            imageUserFragment.load(it.avatarApiDetails)
-                            personGender.text = it.gender
-                            personName.text = it.name
-                            personStatus.text = it.status
-                        }
-                    },
-                    onFailure = {
-                        Toast.makeText(requireContext(),
-                            it.message.toString(),
-                            Toast.LENGTH_LONG).show()
-                    }
-                )
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewLifecycleOwner.lifecycleScope.launch {
 
+            viewModel.getdataFlow()
+                .onEach {
+                    with(binding) {
+                        imageUserFragment.load(it.avatarApiDetails)
+                        personGender.text = it.gender
+                        personName.text = it.name
+                        personStatus.text = it.status
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+
+
+//        viewModel.dataflow
+//            .onEach {
+//                Log.d("checkMy", "первый пошел")
+//
+//                 when(it){
+//                     is LceState.Content -> {
+//                         Log.d("checkMy", "контент ")
+//                         with(binding){
+//                             imageUserFragment.load(it.data.avatarApiDetails)
+//                             personGender.text = it.data.gender
+//                             personName.text = it.data.name
+//                             personStatus.text = it.data.status
+//                         }
+//                     }
+//                     is LceState.Error -> {
+//                         Log.d("checkMy", "ошибка")
+//                         Toast.makeText(requireContext(),"$it + OOOOPS", Toast.LENGTH_SHORT).show()
+//                     }
+//                     is LceState.Loading -> {
+//                        //todo сделать крутелку.
+//                     }
+//                 }
+//            }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         requireContext().networkChangeFlow
             .onEach {
@@ -85,47 +106,3 @@ class PersonDetailsFragment : Fragment() {
         _binding = null
     }
 }
-
-
-//    private val viewModel by viewModels<PersonDetailsViewModel> {
-//        object : ViewModelProvider.Factory {
-//            @Suppress("UNCHECKED_CAST")
-//            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//                return PersonDetailsViewModel(
-//                    persontRepository,
-//                ) as T
-//            }
-//        }
-//    }
-
-
-//    private fun getDetails(id: Int) {
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            Log.d("LOG", "ВЬЮ МОДЕЛЬ ДОЛЖНА ВКЛ")
-//            viewModel.fetchDetails(id)?.onEach {
-//                Log.d("LOG", "флоу начинает $it")
-//
-//                with(binding) {
-//                    imageUserFragment.load(it.avatarApiDetails)
-//                    personGender.text = it.gender
-//                    personName.text = it.name
-//                    personStatus.text = it.status
-//                }
-//            }?.launchIn(viewLifecycleOwner.lifecycleScope)
-//        }
-//    }
-
-
-// можно запускать вот так, одно и то же
-//    private fun getDetails(id: Int) = with(binding) {
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewModel.fetchDetails(id)
-//                ?.onEach { details ->
-//                    checkNotNull(details)
-//                    imageUserFragment.load(details.avatarApiDetails)
-//                    personGender.text = details.gender
-//                    personName.text = details.name
-//                    personStatus.text = details.status
-//                }?.launchIn(viewLifecycleOwner.lifecycleScope)
-//        }
-//    }
