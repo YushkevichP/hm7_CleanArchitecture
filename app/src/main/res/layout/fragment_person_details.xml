@@ -32,6 +32,8 @@
             android:paddingTop="20dp"
             tools:src="@color/purple_200"/>
 
+
+
         <TextView
             android:id="@+id/person_name"
             android:layout_width="wrap_content"

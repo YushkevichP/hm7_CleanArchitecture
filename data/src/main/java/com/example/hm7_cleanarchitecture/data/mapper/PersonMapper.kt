@@ -40,18 +40,3 @@ internal fun Person.toPersonEntity(page: Int): PersonEntity {
         page = page
     )
 }
-
-////для инсерта в бд хотело сделать что0то такое
-//@JvmName("toDomainModelsPersonEntity")
-//internal fun List<PersonEntity>.toDomainModels(): List<Person>{
-//    return map {
-//        it.toDomainModel()
-//    }
-//}
-//
-//
-//fun List<PersonEntity>.toDomainModels(): List<Person>{
-//    return map {
-//        it.toDomainModel()
-//    }
-//}

@@ -9,6 +9,9 @@ import org.koin.dsl.module
 val viewModelModule = module {
 
     viewModelOf(::ListViewModel)
-    viewModelOf(::PersonDetailsViewModel)
-
+    viewModel { (id: Int) ->
+        PersonDetailsViewModel(id, get())
+    }
+    // *можно так можно так, на выбор
+    // viewModelOf(::PersonDetailsViewModel)
 }

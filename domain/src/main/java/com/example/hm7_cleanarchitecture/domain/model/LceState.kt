@@ -8,7 +8,7 @@ sealed class LceState<out T> {
 
     data class Content<T>(
         val data: T,
-        var hasMoreData: Boolean = true, // чтоб остановить запросы, когда подгрузится последняя страничка
+        val hasMoreData: Boolean = true, // чтоб остановить запросы, когда подгрузится последняя страничка
         val throwable: Throwable? = null,
     ) : LceState<T>()
 

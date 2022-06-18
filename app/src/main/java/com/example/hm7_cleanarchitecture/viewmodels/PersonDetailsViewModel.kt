@@ -14,7 +14,6 @@ class PersonDetailsViewModel(
     private val getPersonDetailsUseCase: GetPersonDetailsUseCase,
 ) : ViewModel() {
 
-
     suspend fun getdataFlow() = getPersonDetailsUseCase(id)
         .shareIn(
             scope = viewModelScope,
@@ -23,22 +22,3 @@ class PersonDetailsViewModel(
         )
 }
 
-
-//    val dataflow = flow { }
-//        .flatMapLatest {
-//            getPersonDetailsUseCase(id)
-//        }
-//        .shareIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.Eagerly,
-//            replay = 1
-//        )
-//
-////    val getDataFlow = loadMoreFlow {
-//        getPersonDetailsUseCase(id)
-//    }
-//        .shareIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.Lazily,
-//            replay = 1
-//        )

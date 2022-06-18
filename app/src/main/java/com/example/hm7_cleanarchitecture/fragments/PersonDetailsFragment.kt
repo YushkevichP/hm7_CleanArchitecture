@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -51,43 +52,31 @@ class PersonDetailsFragment : Fragment() {
 
         binding.toolbar.setupWithNavController(findNavController()) // back_arrow
 
+        // с лце
         viewLifecycleOwner.lifecycleScope.launch {
-
             viewModel.getdataFlow()
                 .onEach {
-                    with(binding) {
-                        imageUserFragment.load(it.avatarApiDetails)
-                        personGender.text = it.gender
-                        personName.text = it.name
-                        personStatus.text = it.status
+                    when (it) {
+                        is LceState.Content -> {
+                            with(binding) {
+
+                                imageUserFragment.load(it.data.avatarApiDetails)
+                                personGender.text = it.data.gender
+                                personName.text = it.data.name
+                                personStatus.text = it.data.status
+                            }
+                        }
+                        is LceState.Error -> {
+                            //todo можно показать снекбар
+                            Toast.makeText(requireContext(), "$it + OOOOPS", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        is LceState.Loading -> {
+
+                        }
                     }
                 }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
-
-
-//        viewModel.dataflow
-//            .onEach {
-//                Log.d("checkMy", "первый пошел")
-//
-//                 when(it){
-//                     is LceState.Content -> {
-//                         Log.d("checkMy", "контент ")
-//                         with(binding){
-//                             imageUserFragment.load(it.data.avatarApiDetails)
-//                             personGender.text = it.data.gender
-//                             personName.text = it.data.name
-//                             personStatus.text = it.data.status
-//                         }
-//                     }
-//                     is LceState.Error -> {
-//                         Log.d("checkMy", "ошибка")
-//                         Toast.makeText(requireContext(),"$it + OOOOPS", Toast.LENGTH_SHORT).show()
-//                     }
-//                     is LceState.Loading -> {
-//                        //todo сделать крутелку.
-//                     }
-//                 }
-//            }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         requireContext().networkChangeFlow
             .onEach {
@@ -106,3 +95,17 @@ class PersonDetailsFragment : Fragment() {
         _binding = null
     }
 }
+
+
+// без лце
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewModel.getdataFlow()
+//                .onEach {
+//                    with(binding) {
+//                        imageUserFragment.load(it.avatarApiDetails)
+//                        personGender.text = it.gender
+//                        personName.text = it.name
+//                        personStatus.text = it.status
+//                    }
+//                }.launchIn(viewLifecycleOwner.lifecycleScope)
+//        }
