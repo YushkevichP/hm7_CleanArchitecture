@@ -53,7 +53,6 @@ dependencies {
 
     implementation "androidx.room:room-ktx:$roomVersion"  //выдавало ошибку / нагуглил это
 
-
     implementation "androidx.fragment:fragment-ktx:1.4.1"
 
     //koin
