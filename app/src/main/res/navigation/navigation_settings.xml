@@ -10,8 +10,8 @@
         android:name="com.example.hm7_cleanarchitecture.fragments.SettingsFragment"
         tools:layout="@layout/fragment_settings">
 
-        <!--        <action-->
-        <!--            android:id="@+id/to_details"-->
+        <!--         https://youtu.be/aZqDFzYzTzc?t=1037
+        <!-            android:id="@+id/to_details"-->
         <!--            app:destination="@id/details"-->
         <!--            app:enterAnim="@anim/nav_default_enter_anim"-->
         <!--            app:exitAnim="@anim/nav_default_exit_anim"-->
