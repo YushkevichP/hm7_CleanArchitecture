@@ -10,13 +10,13 @@ import com.example.hm7_cleanarchitecture.data.model.PersonEntity
 @Dao
 internal interface FavouritesDao {
 
-    @Query("SELECT * FROM personentity WHERE (:page) LIKE page LIMIT :limit")
-    suspend fun getFavourites(limit: Int, page: Int): List<FavouriteEntity>
+    @Query("SELECT * FROM personentity  LIMIT :limit")
+    suspend fun getFavourites(limit: Int): List<FavouriteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addFavourite(list: List<FavouriteEntity>)
+    suspend fun addFavourite(person: FavouriteEntity)
 
-    @Query("DELETE FROM FavouriteEntity")
-    suspend fun removeFavourite(person: FavouriteEntity)
+//    @Query("DELETE FROM FavouriteEntity")
+//    suspend fun removeFavourite(person: FavouriteEntity)
 
 }

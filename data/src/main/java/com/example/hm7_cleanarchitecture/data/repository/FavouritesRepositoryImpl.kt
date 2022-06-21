@@ -6,23 +6,24 @@ import com.example.hm7_cleanarchitecture.domain.model.Person
 import com.example.hm7_cleanarchitecture.domain.repository.FavouritesRepository
 
 internal class FavouritesRepositoryImpl(
-    private val favouritesDao: FavouritesDao
-) :FavouritesRepository {
+    private val favouritesDao: FavouritesDao,
+) : FavouritesRepository {
 
-    override suspend fun getFavourites(
-        limit: Int, page: Int
-    ): List<Person> {
-       return favouritesDao.getFavourites(limit,page)
-           .map {
-           it.toDomainModel()
-       }
+    override suspend fun getFavourites(limit: Int): List<Person> {
+        return favouritesDao.getFavourites(limit)
+            .map {
+                it.toDomainModel()
+            }
     }
 
-    override suspend fun insertFavourites(list: List<Person>, page: Int) {
-        favouritesDao.addFavourite(list.map { it.toDomainModel() })
+    override suspend fun insertFavourites(person: Person) {
+      favouritesDao.addFavourite(person.toDomainModel())
     }
 
-    override suspend fun removeFavourites(person: Person) {
-        favouritesDao.removeFavourite(person.toDomainModel())
-    }
+//    //хз правильно ли так??
+//    override suspend fun removeFavourites(person: Person) {
+//        favouritesDao.removeFavourite(person.toDomainModel())
+//    }
+
 }
+
