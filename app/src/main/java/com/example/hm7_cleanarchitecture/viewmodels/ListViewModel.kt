@@ -7,7 +7,7 @@ import com.example.hm7_cleanarchitecture.domain.model.LceState
 import com.example.hm7_cleanarchitecture.domain.model.Person
 import com.example.hm7_cleanarchitecture.domain.model.UIState
 import com.example.hm7_cleanarchitecture.domain.usecase.GetPersonUseCase
-import kotlinx.coroutines.CoroutineScope
+
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 
@@ -27,6 +27,7 @@ class ListViewModel(
     )
 
     val dataFlow = loadMoreFlow
+        .filter { !isLoading }
         .onEach {
             isLoading = true
             if (it == LoadState.REFRESH) {
