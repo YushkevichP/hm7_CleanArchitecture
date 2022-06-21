@@ -2,6 +2,7 @@ package com.example.hm7_cleanarchitecture.data.koin
 
 import com.example.hm7_cleanarchitecture.data.api.PersonApi
 import okhttp3.OkHttpClient
+import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,7 +17,7 @@ internal val networkModule = module {
     }
 
     //create retrofit
-    single {
+    single(qualifier("RickMortyApi")) {
         Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com/api/")
             .addConverterFactory(GsonConverterFactory.create()) // преобразует json объекты в наши оюъекты
@@ -26,6 +27,6 @@ internal val networkModule = module {
 
     //create api
     single {
-        get<Retrofit>().create<PersonApi>()
+        get<Retrofit>(qualifier("RickMortyApi")).create<PersonApi>()
     }
 }

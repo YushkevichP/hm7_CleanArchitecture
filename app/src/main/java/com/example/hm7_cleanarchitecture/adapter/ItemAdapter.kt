@@ -52,10 +52,16 @@ class ItemAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+
+
         when (getItemViewType(position)) {
             TYPE_CONTENT -> {
+
                 val personVH = holder as? PersonViewHolder ?: return
+
                 val item = getItem(position) as? ItemType.Content ?: return
+
                 personVH.bind(item.data)
             }
         }

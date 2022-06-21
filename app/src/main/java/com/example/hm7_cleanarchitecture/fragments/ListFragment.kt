@@ -56,8 +56,6 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         viewModel.dataFlow
             .onEach { uiState ->
                 val pageList = if (uiState.hasMoreData && uiState.persons.isNotEmpty()) {

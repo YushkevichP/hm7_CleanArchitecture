@@ -71,27 +71,27 @@ class FavouriteFragment : Fragment() {
                 .launchIn(viewLifecycleOwner.lifecycleScope)
         }
 
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewModel.getDataFlow()
-//                .onEach {
-//                    when (it) {
-//                        is LceState.Content -> {
-//                            val favourites = it.data.map {
-//                                ItemType.Content(it)
-//                            } + ItemType.Loading
-//
-//                            personAdapter.submitList(favourites)
-//                        }
-//
-//                        is LceState.Error -> {
-//                            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
-//                        }
-//                        is LceState.Loading -> {
-//                            //todo
-//                        }
-//                    }
-//                }.launchIn(viewLifecycleOwner.lifecycleScope)
-//        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getDataFlow()
+                .onEach {
+                    when (it) {
+                        is LceState.Content -> {
+                            val favourites = it.data.map {
+                                ItemType.Content(it)
+                            } + ItemType.Loading
+
+                            personAdapter.submitList(favourites)
+                        }
+
+                        is LceState.Error -> {
+                            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
+                        }
+                        is LceState.Loading -> {
+                            //todo
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
     }
 
     override fun onDestroyView() {
