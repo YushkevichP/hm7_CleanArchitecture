@@ -6,6 +6,9 @@ import com.example.hm7_cleanarchitecture.googlemap.MapFragment
 import com.example.less21_androidcomponents.googlemap.CustomMapFragment
 
 
+
+class MainActivity : AppCompatActivity(R.layout.activity_main)
+
 //class MainActivity : AppCompatActivity(R.layout.activity_main) {
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -19,10 +22,10 @@ import com.example.less21_androidcomponents.googlemap.CustomMapFragment
 
 
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-    }
-}
+//class MainActivity : AppCompatActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_main)
+//
+//    }
+//}

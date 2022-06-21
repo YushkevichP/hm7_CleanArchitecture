@@ -3,29 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/list">
+    app:startDestination="@id/navigation_list">
 
     <fragment
-        android:id="@+id/list"
+        android:id="@+id/navigation_list"
         android:name="com.example.hm7_cleanarchitecture.fragments.ListFragment"
-        tools:layout="@layout/fragment_list">
-
-        <action
-            android:id="@+id/to_details"
-            app:destination="@id/details" />
-    </fragment>
-
+        tools:layout="@layout/fragment_list" />
 
     <fragment
-        android:id="@+id/details"
-        android:name="com.example.hm7_cleanarchitecture.fragments.PersonDetailsFragment"
-        tools:layout="@layout/fragment_person_details">
+        android:id="@+id/navigation_settings"
+        android:name="com.example.hm7_cleanarchitecture.fragments.SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
 
-        <argument
-            android:name="key_id"
-            app:argType="integer"
-            />
-
-    </fragment>
+    <fragment
+        android:id="@+id/navigation_map"
+       android:name="com.example.hm7_cleanarchitecture.googlemap.MapFragment"
+        tools:layout="@layout/fragment_settings" />
 
 </navigation>
