@@ -1,5 +1,6 @@
 package com.example.hm7_cleanarchitecture.data.koin
 
+import com.example.hm7_cleanarchitecture.domain.usecase.GetFavouriteUseCase
 import com.example.hm7_cleanarchitecture.domain.usecase.GetPersonDetailsUseCase
 import com.example.hm7_cleanarchitecture.domain.usecase.GetPersonUseCase
 
@@ -10,5 +11,6 @@ import org.koin.dsl.module
 internal val useCaseModule = module {
     factory { GetPersonUseCase(get(), get()) }
     factory { GetPersonDetailsUseCase(get())}
+    factory { GetFavouriteUseCase(get())}
 
 }

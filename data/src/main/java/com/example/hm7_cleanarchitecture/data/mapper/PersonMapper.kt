@@ -1,5 +1,6 @@
 package com.example.hm7_cleanarchitecture.data.mapper
 
+import com.example.hm7_cleanarchitecture.data.model.FavouriteEntity
 import com.example.hm7_cleanarchitecture.data.model.PersonDTO
 import com.example.hm7_cleanarchitecture.data.model.PersonDetailsDTO
 import com.example.hm7_cleanarchitecture.data.model.PersonEntity
@@ -34,6 +35,25 @@ internal fun PersonEntity.toDomainModel(): Person {
 
 internal fun Person.toPersonEntity(page: Int): PersonEntity {
     return PersonEntity(
+        id = id,
+        name = name,
+        imageUrl = imageUrl,
+        page = page
+    )
+
+}
+
+internal fun FavouriteEntity.toDomainModel(): Person {
+    return Person(
+        id = id,
+        name = name,
+        imageUrl = imageUrl,
+        page = page
+    )
+}
+
+internal fun Person.toDomainModel(): FavouriteEntity {
+    return FavouriteEntity(
         id = id,
         name = name,
         imageUrl = imageUrl,
