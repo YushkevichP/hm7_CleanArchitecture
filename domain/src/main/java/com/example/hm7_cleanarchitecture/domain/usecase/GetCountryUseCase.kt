@@ -11,16 +11,15 @@ import kotlinx.coroutines.flow.flow
 class GetCountryUseCase(
     private val remoteRepository: CountryRemoteRepository,
 ) {
-suspend operator fun invoke() : Flow<LceState<List<Country>>> =
+suspend operator fun invoke() : Flow<List<Country>> =
     flow {
         remoteRepository.getCountries()
             .fold(
                 onSuccess = {
-                    emit(LceState.Content(it))
+                    emit(it)
                 },
                 onFailure = {
-                    emit(LceState.Error(it))
-
+                   error("ERROR")
                 }
             )
     }

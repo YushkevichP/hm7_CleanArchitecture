@@ -11,14 +11,9 @@ import com.example.hm7_cleanarchitecture.viewmodels.TestViewModel
 val viewModelModule = module {
 
     viewModelOf(::ListViewModel)
-
     viewModel { (id: Int) ->
         PersonDetailsViewModel(id, get())
     }
-
     viewModelOf(::CountryViewModel)
-    // *можно так можно так, на выбор
-    // viewModelOf(::PersonDetailsViewModel)
 
-    viewModelOf(::TestViewModel)
 }

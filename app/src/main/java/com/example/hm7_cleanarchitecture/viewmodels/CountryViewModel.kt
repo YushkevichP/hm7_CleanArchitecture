@@ -1,9 +1,7 @@
 package com.example.hm7_cleanarchitecture.viewmodels
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
@@ -14,24 +12,28 @@ import kotlinx.coroutines.flow.*
 
 
 //todo траблы с юзкейсом
-@SuppressLint("MissingPermission")
+
 class CountryViewModel(
 
     private val locationService: LocationService,
-
     private val getCountryUseCase: GetCountryUseCase,
+) : ViewModel() {
 
-    ) : ViewModel() {
-
-         fun show() {
-            Log.d("TAG", "SHOW STARTED")
-            println("JOLOLOLO")}
+    fun show() {
+        Log.d("TAG", "заходит")
+    }
 
     private val locationFlow = MutableSharedFlow<Unit>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
+    private val countriesFlow = MutableStateFlow(Unit)
+
+    @SuppressLint("MissingPermission")
+    fun getLocationFlow() = locationService.getLocationFlow()
+
+    @SuppressLint("MissingPermission")
     val currentLocationFlow = locationFlow
         .mapLatest {
             locationService.getCurrentLocation()
@@ -42,62 +44,22 @@ class CountryViewModel(
             replay = 1
         )
 
+    val getcountriesFlow = countriesFlow
+        .flatMapLatest {
+            getCountryUseCase()
+        }
+        .shareIn(
+            scope = viewModelScope,
+            replay = 1,
+            started = SharingStarted.Lazily
+        )
 
-    private val countriesFlow = MutableStateFlow(Unit)
-
-//    val getCountries = countriesFlow
-//        .flatMapLatest {
-//            getCountryUseCase()
-//        }
-//        .shareIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.Lazily,
-//            replay = 1
-//        )
-
-    fun loadCurrentLocation() {
+    fun loadStartLocation() {
         locationFlow.tryEmit(Unit)
     }
 
-
-    @SuppressLint("MissingPermission")
-    fun getLocationFlow() = locationService.getLocationFlow()
-
+//    init {
+//        loadStartLocation()
+//    }
 
 }
-
-//private val locationFlow = MutableSharedFlow<Unit>(
-//    extraBufferCapacity = 1,
-//    onBufferOverflow = BufferOverflow.DROP_OLDEST
-//)
-
-//val currentLocationFlow = locationFlow
-//    .mapLatest {
-//        locationService.getCurrentLocation()
-//    }
-//    .shareIn(
-//        scope = viewModelScope,
-//        started = SharingStarted.Lazily,
-//        replay = 1
-//    )
-//
-//
-//private val countriesFlow = MutableStateFlow(Unit)
-//
-//val getCountries = countriesFlow
-//    .flatMapLatest {
-//        getCountryUseCase()
-//    }
-//    .shareIn(
-//        scope = viewModelScope,
-//        started = SharingStarted.Lazily,
-//        replay = 1
-//    )
-//
-//fun loadCurrentLocation() {
-//    locationFlow.tryEmit(Unit)
-//}
-//
-//
-//@SuppressLint("MissingPermission")
-//fun getLocationFlow() = locationService.getLocationFlow()

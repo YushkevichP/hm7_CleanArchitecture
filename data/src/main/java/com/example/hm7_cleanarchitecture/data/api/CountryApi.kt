@@ -11,9 +11,9 @@ internal interface CountryApi {
         suspend fun getCountries(): List<CountryResponse>
 
         @GET("name/{name}")
-        suspend fun getCountrtByName(
+        suspend fun getCountryByName(
                 @Path("name") name: String
         //тут поменял на список
-        ): List<CountryResponse>
+        ): CountryResponse
 
 }

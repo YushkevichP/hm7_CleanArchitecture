@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +43,6 @@ class MapFragment : Fragment() {
     private val viewModel by viewModel<CountryViewModel>()
 
     private var googleMap: GoogleMap? = null
-
     private var locationListener: LocationSource.OnLocationChangedListener? = null
 
 
@@ -51,20 +51,16 @@ class MapFragment : Fragment() {
         ActivityResultContracts.RequestPermission()
     ) { permissionGranted ->
         if (permissionGranted) {
-            println()
-            viewLifecycleOwner.lifecycleScope.launch {
 
+            // Подписываемся на обновления локации если разрешение получено
+            viewModel
+                .getLocationFlow()
+                .onEach { updatedLocation ->
 
-               viewModel.loadCurrentLocation()
-
-                viewModel.currentLocationFlow
-                    .onEach { location ->
-                        location?.let {
-                            moveCameraToLocation(location)
-                        }
-                    }
-
-            }
+                    //когда приходит локация, то мы ее отрисовваываем через лисенер
+                    locationListener?.onLocationChanged(updatedLocation)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 
@@ -84,17 +80,18 @@ class MapFragment : Fragment() {
 
         permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
+        //---- current Location + camera annimation
+        viewModel.currentLocationFlow
+            .onEach { location ->
+                location?.let {
+                    moveCameraToLocation(location)
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        //    location updates
-        viewModel
-            .getLocationFlow()
-            .onEach {
-                //когда приходит локация, то мы ее отрисовваываем через лисенер
-                locationListener?.onLocationChanged(it)
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        //чтоб дернуть флоу с локешном
+        viewModel.loadStartLocation()
 
-        //чтоб получить карту
+        //init Map
         binding.mapView.getMapAsync { map ->
             googleMap = map.apply {
                 uiSettings.isCompassEnabled = true
@@ -114,33 +111,23 @@ class MapFragment : Fragment() {
                 }
             })
 
-//            viewModel.getCountries
-//                .onEach {
-//                    it.forEach {
-//                        map.addMarker(
-//                            MarkerOptions()
-//                                .title(it.name)
-//                                .position(LatLng(it.latitude, it.longitude))
-//                        )
-//                    }
-//                }
-
+            //get list of countries and show it ont the map
+            viewModel.getcountriesFlow
+                .onEach { list ->
+                    list.map { country ->
+                        map.addMarker(
+                            MarkerOptions()
+                                .title(country.name)
+                                .position(LatLng(country.latitude, country.longitude))
+                        )
+                    }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
 
         binding.mapView.onCreate(savedInstanceState)
-
-        ViewCompat.setOnApplyWindowInsetsListener(view) { _, insets ->
-            val systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            googleMap?.setPadding(
-                systemBarInsets.left,
-                systemBarInsets.top,
-                systemBarInsets.right,
-                systemBarInsets.bottom
-            )
-            WindowInsetsCompat.CONSUMED
-        }
+        setInsets(view)
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -172,7 +159,7 @@ class MapFragment : Fragment() {
         )
     }
 
-
+    //проверка пермишна
     private fun hasLocationPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
@@ -180,334 +167,17 @@ class MapFragment : Fragment() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-//    ViewCompat.setOnApplyWindowInsetsListener(binding.mapView){ _, insets->
-//
-//        googleMap?.setPadding(
-//
-//        )
-//        WindowInsetsCompat.CONSUMED
-//    }
+    //ставим инсеты,чтоб за систембары не залазило
+    private fun setInsets(view: View) {
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, insets ->
+            val systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            googleMap?.setPadding(
+                systemBarInsets.left,
+                systemBarInsets.top,
+                systemBarInsets.right,
+                systemBarInsets.bottom
+            )
+            WindowInsetsCompat.CONSUMED
+        }
+    }
 }
-
-
-//private var googleMap: GoogleMap? = null
-//
-//private var locationListener: LocationSource.OnLocationChangedListener? = null
-//
-//
-//@SuppressLint("MissingPermission")  // запрашиваем пермишн
-//private val permissionLauncher = registerForActivityResult(
-//    ActivityResultContracts.RequestPermission()
-//) { permissionGranted ->
-//    if (permissionGranted) {
-//        println()
-//        viewLifecycleOwner.lifecycleScope.launch {
-//
-////
-////                viewModel.loadCurrentLocation()
-//
-//            with(binding){
-//
-//            }
-//
-//
-//            viewModel.currentLocationFlow
-//                .onEach { location ->
-//                    location?.let {
-//                        moveCameraToLocation(location)
-//                    }
-//                }
-//
-//        }
-//    }
-//}
-//
-//override fun onCreateView(
-//    inflater: LayoutInflater,
-//    container: ViewGroup?,
-//    savedInstanceState: Bundle?,
-//): View {
-//    return FragmentMapBinding.inflate(inflater, container, false)
-//        .also { _binding = it }
-//        .root
-//}
-//
-//@SuppressLint("MissingPermission")
-//override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//    super.onViewCreated(view, savedInstanceState)
-//
-//    permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-//
-//
-//    //location updates
-////        viewModel
-////            .getLocationFlow()
-////            .onEach {
-////                //когда приходит локация, то мы ее отрисовваываем через лисенер
-////                locationListener?.onLocationChanged(it)
-////            }
-////            .launchIn(viewLifecycleOwner.lifecycleScope)
-//
-//
-//    //чтоб получить карту
-//    binding.mapView.getMapAsync { map ->
-//        googleMap = map.apply {
-//            uiSettings.isCompassEnabled = true
-//            uiSettings.isMyLocationButtonEnabled = true
-//            uiSettings.isZoomControlsEnabled = true
-//        }
-//
-//        map.isMyLocationEnabled = hasLocationPermission()
-//
-//        map.setLocationSource(object : LocationSource {
-//            override fun activate(listener: LocationSource.OnLocationChangedListener) {
-//                locationListener = listener
-//            }
-//
-//            override fun deactivate() {
-//                locationListener = null
-//            }
-//
-//        })
-//
-////            viewModel.getCountries
-////                .onEach {
-////                    it.forEach {
-////                        map.addMarker(
-////                            MarkerOptions()
-////                                .title(it.name)
-////                                .position(LatLng(it.latitude, it.longitude))
-////                        )
-////                    }
-////                }
-//
-//        //
-////            map.addMarker(
-////                MarkerOptions()
-////                    .title("My marker")
-////                    .position(
-////                        LatLng(
-////                            28.9165,
-////                            48.4357
-////                        )
-////                    )
-////            )
-//
-//    }
-//
-//    binding.mapView.onCreate(savedInstanceState)
-//
-//
-//
-//    ViewCompat.setOnApplyWindowInsetsListener(view) { _, insets ->
-//        val systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//        googleMap?.setPadding(
-//            systemBarInsets.left,
-//            systemBarInsets.top,
-//            systemBarInsets.right,
-//            systemBarInsets.bottom
-//        )
-//        WindowInsetsCompat.CONSUMED
-//    }
-//}
-//
-//
-//override fun onStart() {
-//    super.onStart()
-//    binding.mapView.onStart()
-//}
-//
-//override fun onStop() {
-//    super.onStop()
-//    binding.mapView.onStop()
-//}
-//
-//override fun onSaveInstanceState(outState: Bundle) {
-//    super.onSaveInstanceState(outState)
-//    binding.mapView.onSaveInstanceState(outState)
-//}
-//
-//override fun onDestroyView() {
-//    super.onDestroyView()
-//    binding.mapView.onDestroy()
-//    googleMap = null
-//    _binding = null
-//}
-//
-////анимация камеры
-//private fun moveCameraToLocation(location: Location) {
-//    val current = LatLng(location.latitude, location.longitude)
-//    googleMap?.animateCamera(
-//        CameraUpdateFactory.newLatLngZoom(current, 17f)
-//    )
-//}
-//
-//
-//private fun hasLocationPermission(): Boolean {
-//    return ContextCompat.checkSelfPermission(
-//        requireContext(),
-//        Manifest.permission.ACCESS_FINE_LOCATION
-//    ) == PackageManager.PERMISSION_GRANTED
-//}
-//}
-
-
-//
-//       ViewCompat.setOnApplyWindowInsetsListener(binding.mapView){ _, insets->
-//
-//           googleMap?.setPadding(
-//
-//           )
-//           WindowInsetsCompat.CONSUMED
-//       }
-
-
-//class MapFragment : Fragment() {
-//
-//    private var _binding: FragmentMapBinding? = null
-//    private val binding get() = requireNotNull(_binding)
-//
-//    private val viewModel by viewModel<MapViewModel>()
-//
-//
-////    private var googleMap: GoogleMap? = null
-////    private var locationListener: LocationSource.OnLocationChangedListener? = null
-//
-// //   private val locationService by inject<LocationService>()
-//
-//    @SuppressLint("MissingPermission")  // запрашиваем пермишн
-//    private val permissionLauncher = registerForActivityResult(
-//        ActivityResultContracts.RequestPermission()
-//    ) { permissionGranted ->
-//        if (permissionGranted) {
-//            viewLifecycleOwner.lifecycleScope.launch {
-//                locationService.getCurrentLocation()?.let(::moveCameraToLocation)
-//            }
-//        }
-//    }
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?,
-//    ): View {
-//        return FragmentMapBinding.inflate(inflater, container, false)
-//            .also { _binding = it }
-//            .root
-//    }
-//
-//    @SuppressLint("MissingPermission")
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-//
-//
-//
-//        locationService
-//            .getLocationFlow()
-//            .onEach {
-//                //когда приходит локация, то мы ее отрисовваываем через лисенер
-//                locationListener?.onLocationChanged(it)
-//
-//            }
-//            .launchIn(viewLifecycleOwner.lifecycleScope)
-//
-//
-//        //чтоб получить карту
-//        binding.mapView.getMapAsync { map ->
-//            googleMap = map.apply {
-//                uiSettings.isCompassEnabled = true
-//                uiSettings.isMyLocationButtonEnabled = true
-//                uiSettings.isZoomControlsEnabled = true
-//            }
-//
-//            map.isMyLocationEnabled = hasLocationPermission()
-//
-//            map.setLocationSource(object : LocationSource {
-//                override fun activate(listener: LocationSource.OnLocationChangedListener) {
-//                    locationListener = listener
-//                }
-//
-//                override fun deactivate() {
-//                    locationListener = null
-//                }
-//
-//            })
-//            map.addMarker(
-//                MarkerOptions()
-//                    .title("My marker")
-//                    .position(
-//                        LatLng(
-//                            28.9165,
-//                            48.4357
-//                        )
-//                    )
-//            )
-//
-//        }
-//
-//        binding.mapView.onCreate(savedInstanceState)
-//
-//
-//
-//        ViewCompat.setOnApplyWindowInsetsListener(view) { _, insets ->
-//            val systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            googleMap?.setPadding(
-//                systemBarInsets.left,
-//                systemBarInsets.top,
-//                systemBarInsets.right,
-//                systemBarInsets.bottom
-//            )
-//            WindowInsetsCompat.CONSUMED
-//        }
-//    }
-//
-//
-//    override fun onStart() {
-//        super.onStart()
-//        binding.mapView.onStart()
-//    }
-//
-//    override fun onStop() {
-//        super.onStop()
-//        binding.mapView.onStop()
-//    }
-//
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        binding.mapView.onSaveInstanceState(outState)
-//    }
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        binding.mapView.onDestroy()
-//        googleMap = null
-//        _binding = null
-//    }
-//
-//    //анимация камеры
-//    private fun moveCameraToLocation(location: Location) {
-//        val current = LatLng(location.latitude, location.longitude)
-//        googleMap?.animateCamera(
-//            CameraUpdateFactory.newLatLngZoom(current, 17f)
-//        )
-//    }
-//
-//
-//    private fun hasLocationPermission(): Boolean {
-//        return ContextCompat.checkSelfPermission(
-//            requireContext(),
-//            Manifest.permission.ACCESS_FINE_LOCATION
-//        ) == PackageManager.PERMISSION_GRANTED
-//    }
-//}
-//
-////
-////       ViewCompat.setOnApplyWindowInsetsListener(binding.mapView){ _, insets->
-////
-////           googleMap?.setPadding(
-////
-////           )
-////           WindowInsetsCompat.CONSUMED
-////       }
