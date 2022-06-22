@@ -8,9 +8,7 @@ import org.koin.dsl.module
 
 internal val useCaseModule = module {
     factory { GetPersonUseCase(get(), get()) }
-    factory { GetPersonDetailsUseCase(get()) }
-    factory { GetFavouriteUseCase(get()) }
     factory { GetCountryUseCase(get()) }
-    factory { GetFlagUseCase(get()) }
+    factory { GetPersonDetailsUseCase(get()) }
 
 }

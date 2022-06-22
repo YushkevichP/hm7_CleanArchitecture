@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.hm7_cleanarchitecture.databinding.FragmentSettingsBinding
 
-
+//todo
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null

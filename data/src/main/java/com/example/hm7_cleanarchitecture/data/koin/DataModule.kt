@@ -10,6 +10,7 @@ val dataModule = module {
         databaseModule,
         repositoryModule,
         useCaseModule,
-        serviceModule
+        serviceModule,
+        //mapNetworkModule
     )
 }

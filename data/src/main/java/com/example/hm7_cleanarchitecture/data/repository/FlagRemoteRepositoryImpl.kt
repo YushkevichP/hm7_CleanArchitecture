@@ -5,18 +5,18 @@ import com.example.hm7_cleanarchitecture.data.mapper.toDomainFlag
 import com.example.hm7_cleanarchitecture.domain.model.Flag
 import com.example.hm7_cleanarchitecture.domain.repository.FlagRemoteRepository
 
-internal class FlagRemoteRepositoryImpl(
-    private val countryApi: CountryApi,
-) : FlagRemoteRepository {
-
-    override suspend fun getCountryByName(name: String): Result<Flag> {
-
-        return runCatching {
-            val country = countryApi.getCountrtByName(name)
-            country.toDomainFlag()
-        }
-    }
-}
+//internal class FlagRemoteRepositoryImpl(
+//    private val countryApi: CountryApi,
+//) : FlagRemoteRepository {
+//
+//    override suspend fun getCountryByName(name: String): Result<Flag> {
+//
+//        return runCatching {
+//            val country = countryApi.getCountrtByName(name)
+//            country.toDomainFlag()
+//        }
+//    }
+//}
 
 //мапил сразу тут так - но вынес в мапперы, там иначе
 //override suspend fun getCountryByName(name:String): Result<Flag> {

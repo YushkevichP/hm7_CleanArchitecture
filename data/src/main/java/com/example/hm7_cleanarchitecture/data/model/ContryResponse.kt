@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 
 //todo можно заюзать флаг/столицу/ население(?)
-internal data class CountryResponse(
+data class CountryResponse(
 
     @SerializedName("capital")
     val capital: List<String>,

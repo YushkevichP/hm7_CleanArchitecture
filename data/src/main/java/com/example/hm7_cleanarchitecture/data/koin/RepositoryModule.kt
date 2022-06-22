@@ -2,7 +2,7 @@ package com.example.hm7_cleanarchitecture.data.koin
 import com.example.hm7_cleanarchitecture.data.repository.FavouritesRepositoryImpl
 import com.example.hm7_cleanarchitecture.data.repository.PersonLocalRepositoryImpl
 import com.example.hm7_cleanarchitecture.data.repository.PersonRemoteRepositoryImpl
-import com.example.hm7_cleanarchitecture.data.repository.FlagRemoteRepositoryImpl
+
 import com.example.hm7_cleanarchitecture.data.repository.CountryRemoteRepositoryImpl
 import com.example.hm7_cleanarchitecture.domain.repository.*
 import org.koin.core.module.dsl.bind
@@ -21,10 +21,6 @@ internal val repositoryModule = module {
 
     singleOf(::FavouritesRepositoryImpl){
         bind<FavouritesRepository>()
-    }
-
-    singleOf(::FlagRemoteRepositoryImpl) {
-        bind<FlagRemoteRepository>()
     }
 
     singleOf(::CountryRemoteRepositoryImpl) {

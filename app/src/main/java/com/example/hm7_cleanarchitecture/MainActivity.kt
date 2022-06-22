@@ -3,8 +3,7 @@ package com.example.hm7_cleanarchitecture
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.hm7_cleanarchitecture.fragments.BottomNavFragment
-import com.example.hm7_cleanarchitecture.googlemap.MapFragment
-import com.example.less21_androidcomponents.googlemap.CustomMapFragment
+
 
 
 

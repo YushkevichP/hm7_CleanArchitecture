@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+
 // должен быть интеррнал?
 class LocationService(context: Context) {
 
@@ -48,15 +49,18 @@ class LocationService(context: Context) {
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     suspend fun getCurrentLocation(): Location? = suspendCoroutine { continuation ->
         locationClient.lastLocation
+
             //если успешно
             .addOnSuccessListener { location ->
                 continuation.resume(location)
             }
+
             //если отменится
             .addOnCanceledListener {
                 continuation.resume(null)
             }
-            // если фейл
+
+            //если фейл
             .addOnFailureListener {
                 continuation.resume(null)
             }

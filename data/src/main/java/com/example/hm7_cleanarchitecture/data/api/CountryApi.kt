@@ -13,6 +13,7 @@ internal interface CountryApi {
         @GET("name/{name}")
         suspend fun getCountrtByName(
                 @Path("name") name: String
-        ): CountryResponse
+        //тут поменял на список
+        ): List<CountryResponse>
 
 }

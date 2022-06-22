@@ -15,7 +15,6 @@ class ListViewModel(
     private val getPersonUseCase: GetPersonUseCase,
 ) : ViewModel() {
 
-
     private var isLoading = false
     private var currentPage = 1
     private var hasMoreData = true
@@ -63,7 +62,6 @@ class ListViewModel(
             started = SharingStarted.Eagerly,
             replay = 1
         )
-
 
     init {
         onLoadMore()

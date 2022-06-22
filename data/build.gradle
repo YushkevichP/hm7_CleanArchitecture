@@ -53,6 +53,9 @@ dependencies {
 
     implementation "androidx.room:room-ktx:$roomVersion"  //выдавало ошибку / нагуглил это
 
+    def okhttp_version = "4.9.3"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
     implementation "androidx.fragment:fragment-ktx:1.4.1"
 
     //koin
