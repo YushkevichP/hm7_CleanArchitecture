@@ -17,6 +17,7 @@ import com.example.hm7_cleanarchitecture.databinding.FragmentPersonDetailsBindin
 import com.example.hm7_cleanarchitecture.domain.model.LceState
 import com.example.hm7_cleanarchitecture.utilities.networkChangeFlow
 import com.example.hm7_cleanarchitecture.viewmodels.PersonDetailsViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -49,6 +50,14 @@ class PersonDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireContext().networkChangeFlow
+            .onEach {
+                when (it) {
+                    true -> Log.d("check", "Есть конекшн")
+                    false -> Snackbar.make(view, "Нет сети", Snackbar.LENGTH_LONG).show()
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.toolbar.setupWithNavController(findNavController()) // back_arrow
 

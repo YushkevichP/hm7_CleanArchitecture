@@ -14,7 +14,11 @@ data class CountryResponse(
 
     @SerializedName("population")
     val population: Int,
-)
+
+    @SerializedName("flags")
+    val flags: Flags,
+
+    )
 
 data class CapitalInfo(
     @SerializedName("latlng")
@@ -28,6 +32,7 @@ data class Flags(
     val svg: String,
 )
 
+
 data class Name(
     @SerializedName("common")
     val common: String,
@@ -36,18 +41,15 @@ data class Name(
 )
 
 
-// добавить если поулчится в инфо по клику
+// todo добавить если поулчится в инфо по клику
+
 //    @SerializedName("capital")
 //    val capital: List<String>,
 //
 //    @SerializedName("capitalInfo")
 //    val capitalInfo: CapitalInfo,
 
-//    @SerializedName("flag")
-//    val flag: String,
 
-//    @SerializedName("flags")
-//    val flags: Flags,
 
 
 
