@@ -93,14 +93,7 @@ dependencies {
     def coroutinesLifecycleVersion = "2.4.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$coroutinesLifecycleVersion"
 
-    //Google Map
-    implementation 'com.google.maps.android:android-maps-utils:1.3.3'
 
-    //Google Map - location
-    implementation "com.google.android.gms:play-services-location:19.0.1"
-
-    //Google Map - maps
-    implementation "com.google.android.gms:play-services-maps:18.0.2"
 
 
 }

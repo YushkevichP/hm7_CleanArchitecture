@@ -1,9 +1,6 @@
 package com.example.hm7_cleanarchitecture.data.koin
 
-
-
-import com.example.hm7_cleanarchitecture.data.api.PersonApi
-import com.example.hm7_cleanarchitecture.data.model.CountriesResponseItem
+import com.example.hm7_cleanarchitecture.data.model.CountryResponse
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -23,6 +20,6 @@ internal val mapNetworkModule = module {
 
     //create api
     single {
-        get<Retrofit>(qualifier("Countries")).create<CountriesResponseItem>()
+        get<Retrofit>(qualifier("Countries")).create<CountryResponse>()
     }
 }
