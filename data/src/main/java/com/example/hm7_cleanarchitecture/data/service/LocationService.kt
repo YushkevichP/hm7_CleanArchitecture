@@ -13,7 +13,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-
+// должен быть интеррнал?
 class LocationService(context: Context) {
 
     private val locationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -33,7 +33,11 @@ class LocationService(context: Context) {
         }
 
         //это мы подписываемся
-        locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        locationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
 
         //тут отписываемся
         awaitClose {

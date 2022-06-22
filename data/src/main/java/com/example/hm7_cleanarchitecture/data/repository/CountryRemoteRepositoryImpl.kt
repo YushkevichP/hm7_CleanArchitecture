@@ -5,7 +5,7 @@ import com.example.hm7_cleanarchitecture.data.mapper.toDomainModel
 import com.example.hm7_cleanarchitecture.domain.model.Country
 import com.example.hm7_cleanarchitecture.domain.repository.CountryRemoteRepository
 
-class CountryRemoteRepositoryImpl(
+internal class CountryRemoteRepositoryImpl(
     private val countryApi: CountryApi,
 ) : CountryRemoteRepository {
 

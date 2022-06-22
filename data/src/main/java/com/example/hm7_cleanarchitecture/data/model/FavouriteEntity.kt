@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class FavouriteEntity(
+internal data class FavouriteEntity(
 
     @PrimaryKey
     val id: Int,

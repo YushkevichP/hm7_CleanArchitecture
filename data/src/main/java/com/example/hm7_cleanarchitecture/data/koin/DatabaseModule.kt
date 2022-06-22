@@ -19,7 +19,4 @@ internal val databaseModule = module {
         get<AppDatabase>().personDao()
     }
 
-//    single {
-//        get<AppDatabase>().favouriteDao()
-//    }
 }

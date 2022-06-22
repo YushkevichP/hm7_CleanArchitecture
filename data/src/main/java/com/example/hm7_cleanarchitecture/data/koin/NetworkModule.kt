@@ -1,6 +1,7 @@
 package com.example.hm7_cleanarchitecture.data.koin
 
 import com.example.hm7_cleanarchitecture.data.api.PersonApi
+import com.example.hm7_cleanarchitecture.data.model.CountryResponse
 import okhttp3.OkHttpClient
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
@@ -16,7 +17,7 @@ internal val networkModule = module {
             .build()
     }
 
-    //create retrofit
+    //create retrofit Person
     single(qualifier("RickMortyApi")) {
         Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com/api/")
@@ -25,8 +26,26 @@ internal val networkModule = module {
             .build()
     }
 
-    //create api
+    //create api Person
     single {
         get<Retrofit>(qualifier("RickMortyApi")).create<PersonApi>()
     }
+
+
+    //create retrofit Country
+    single(qualifier("Countries")) {
+        Retrofit.Builder()
+            .baseUrl("https://restcountries.com/v3.1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(get())
+            .build()
+    }
+
+    //create api Country
+    single {
+        get<Retrofit>(qualifier("Countries")).create<CountryResponse>()
+    }
+
+
+
 }

@@ -15,7 +15,6 @@ class GetFavouriteUseCase(
         emit(LceState.Content(cache))
     }
 
-
     companion object {
         private const val AMOUNT_LIMIT = 20
     }

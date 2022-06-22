@@ -4,7 +4,7 @@ import com.example.hm7_cleanarchitecture.data.model.CountryResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface CountryApi {
+internal interface CountryApi {
 
         //получаем список всех стран
         @GET("all")
